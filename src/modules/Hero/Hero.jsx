@@ -11,7 +11,7 @@ export default function ProductDetailSection() {
   ];
 
   return (
-    <div className="bg-gray-50 min-h-screen py-6 font-sans">
+    <div className="bg-[#FAFAFA] min-h-screen py-6 font-sans">
       <div className="max-w-7xl mx-auto px-6">
         {/* Breadcrumb */}
         <div className="flex items-center gap-2 text-sm mb-6">
