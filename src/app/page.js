@@ -1,6 +1,7 @@
 import Navbar from '@/components/Navbar';
 import Hero from '@/modules/Hero/Hero';
 import ReadingList from '@/modules/ReadingList/ReadingList';
+import BooksForYou from '@/modules/BooksForYou/BooksForYou';
 
 export default function Home() {
   return (
@@ -8,6 +9,7 @@ export default function Home() {
       <Navbar />
       <Hero />
       <ReadingList />
+      <BooksForYou />
     </div>
   );
 }

@@ -13,18 +13,18 @@ export default function ProductDetailSection() {
       try {
         setLoading(true);
         const response = await fetch('https://bukuacak-9bdcb4ef2605.herokuapp.com/api/v1/book?page=1');
-        
+
         if (!response.ok) {
           throw new Error('Failed to fetch book');
         }
-        
+
         const data = await response.json();
         const booksArray = data.books || [];
-        
+
         if (booksArray.length > 0) {
           setBook(booksArray[2]);
         }
-        
+
         setLoading(false);
       } catch (err) {
         console.error('Error fetching book:', err);
@@ -36,7 +36,7 @@ export default function ProductDetailSection() {
   }, []);
 
   const images = [
-    book?.cover_image || '/book-image.jpg', 
+    book?.cover_image || '/book-image.jpg',
   ];
 
   if (loading) {
@@ -65,7 +65,7 @@ export default function ProductDetailSection() {
         {/* Breadcrumb */}
         <div className="flex items-center gap-2 text-sm mb-6">
           <a href="#" className="text-[#252B42] font-bold">Home</a>
-            <CaretRightIcon className="w-4 h-4 text-[#BDBDBD]" weight='bold'/>
+          <CaretRightIcon className="w-4 h-4 text-[#BDBDBD]" weight='bold' />
           <span className="text-[#BDBDBD] font-bold">Shop</span>
         </div>
 
@@ -76,21 +76,21 @@ export default function ProductDetailSection() {
             <div className="relative bg-[#B0B0B0]  overflow-hidden h-full">
               {/* Main Image */}
               <div className="w-full h-full flex items-center justify-center p-8">
-                <img 
-                  src={book.cover_image} 
+                <img
+                  src={book.cover_image || '/placeholder.svg'}
                   alt={book.title}
                   className="max-h-[350px] w-auto object-contain rounded-lg shadow-2xl"
                 />
               </div>
 
               {/* Navigation Arrows */}
-              <button 
+              <button
                 onClick={() => setCurrentImageIndex(Math.max(0, currentImageIndex - 1))}
                 className="absolute left-4 top-1/2 -translate-y-1/2 bg-transparent rounded-full"
               >
                 <CaretLeftIcon className="text-6xl text-white" />
               </button>
-              <button 
+              <button
                 onClick={() => setCurrentImageIndex(Math.min(images.length - 1, currentImageIndex + 1))}
                 className="absolute right-4 top-1/2 -translate-y-1/2 bg-transparent rounded-full"
               >
@@ -110,7 +110,7 @@ export default function ProductDetailSection() {
               ))}
             </div>
             <h1 className="text-[32px] font-semibold text-[#252B42] mb-2">{book.title}</h1>
-            
+
             {/* Price */}
             <div className="text-2xl font-semibold text-[#252B42] mb-2">
               {book.details?.price || 'Price not available'}
@@ -164,7 +164,7 @@ export default function ProductDetailSection() {
                 <ShoppingCartSimpleIcon className="text-xl text-black" />
               </button>
               <button className="border bg-[#DBECFF] p-3 rounded-full transition-colors cursor-pointer">
-                <EyeIcon className="text-xl text-black" weight='fill'/>
+                <EyeIcon className="text-xl text-black" weight='fill' />
               </button>
             </div>
           </div>
