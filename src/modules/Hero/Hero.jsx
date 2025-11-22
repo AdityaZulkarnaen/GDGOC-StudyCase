@@ -1,43 +1,35 @@
 'use client';
 
 import { useState } from 'react';
+import { CaretRightIcon, ShoppingCartSimpleIcon, EyeIcon, HeartStraightIcon } from "@phosphor-icons/react";
 
 export default function ProductDetailSection() {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
   const images = [
-    '/book-image.jpg', // Placeholder - replace with actual image
+    '/book-image.jpg', 
   ];
 
   return (
-    <div className="bg-gray-50 min-h-screen py-8 font-sans">
+    <div className="bg-gray-50 min-h-screen py-6 font-sans">
       <div className="max-w-7xl mx-auto px-6">
         {/* Breadcrumb */}
-        <div className="flex items-center gap-2 text-sm text-gray-600 mb-8">
-          <a href="#" className="hover:text-gray-900">Home</a>
-          <span>&gt;</span>
-          <span className="text-gray-400">Shop</span>
+        <div className="flex items-center gap-2 text-sm mb-6">
+          <a href="#" className="text-[#252B42] font-bold">Home</a>
+            <CaretRightIcon className="w-4 h-4 text-[#BDBDBD]" weight='bold'/>
+          <span className="text-[#BDBDBD] font-bold">Shop</span>
         </div>
 
         {/* Product Detail Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 bg-white rounded-lg p-8">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
           {/* Left Side - Image Gallery */}
-          <div className="flex flex-col">
-            <div className="relative bg-gray-200 rounded-lg overflow-hidden mb-4" style={{ height: '500px' }}>
+          <div className="flex flex-col h-full">
+            <div className="relative bg-gray-200  overflow-hidden h-full">
               {/* Main Image */}
               <div className="w-full h-full flex items-center justify-center">
                 <div className="w-64 h-96 bg-gradient-to-br from-blue-400 via-blue-600 to-blue-900 rounded-lg shadow-2xl flex items-center justify-center relative">
-                  <div className="absolute top-4 left-4 text-white text-sm transform -rotate-90 origin-top-left">
-                    <div className="text-xs mb-2">BEYOND</div>
-                    <div className="text-xs">THE STARS</div>
-                  </div>
                   <div className="text-white text-center">
                     <div className="text-sm mb-2">Book Cover</div>
-                  </div>
-                  <div className="absolute bottom-4 left-4">
-                    <div className="w-8 h-8 bg-white rounded-full flex items-center justify-center">
-                      <span className="text-xs">🌙</span>
-                    </div>
                   </div>
                 </div>
               </div>
@@ -61,25 +53,25 @@ export default function ProductDetailSection() {
           {/* Right Side - Product Info */}
           <div className="flex flex-col">
             {/* Tags */}
-            <div className="flex gap-3 mb-8">
-              <span className="px-4 py-2 bg-gray-100 text-gray-700 rounded-full text-sm">
+            <div className="flex gap-3 mb-8 text-[16px]">
+              <span className="px-4 py-2 bg-[#E0E0E0] text-black font-medium rounded-full text-sm">
                 Self Improvement
               </span>
-              <span className="px-4 py-2 bg-gray-100 text-gray-700 rounded-full text-sm">
+              <span className="px-4 py-2 bg-[#E0E0E0] text-black font-medium rounded-full text-sm">
                 Technology
               </span>
             </div>
-            <h1 className="text-4xl font-bold text-gray-900 mb-4">Beyond the Stars</h1>
+            <h1 className="text-[32px] font-semibold text-[#252B42] mb-2">Beyond the Stars</h1>
             
             {/* Price */}
-            <div className="text-3xl font-bold text-gray-900 mb-4">
+            <div className="text-2xl font-semibold text-[#252B42] mb-2">
               $1,139.33
             </div>
 
             {/* Availability */}
-            <div className="flex items-center gap-2 mb-6">
-              <span className="text-gray-600">Availability :</span>
-              <span className="text-[#00796B] font-medium">In Stock</span>
+            <div className="flex items-center gap-2 mb-4">
+              <span className="text-[#737373] font-semibold">Availability :</span>
+              <span className="text-[#23A6F0] font-semibold">In Stock</span>
             </div>
 
             {/* Description */}
@@ -89,24 +81,21 @@ export default function ProductDetailSection() {
               consequent sent nostrum met. Author-Marcus pson
             </p>
 
-            {/* Divider */}
-            <div className="border-t border-gray-200 mb-8"></div>
-
             {/* Product Details */}
             <div className="space-y-3 mb-8">
-              <div className="flex gap-2">
+              <div className="flex gap-2 mb-1">
                 <span className="text-gray-600 font-medium">Pages:</span>
                 <span className="text-gray-800">328</span>
               </div>
-              <div className="flex gap-2">
+              <div className="flex gap-2 mb-1">
                 <span className="text-gray-600 font-medium">Publisher:</span>
                 <span className="text-gray-800">Noir House Books</span>
               </div>
-              <div className="flex gap-2">
+              <div className="flex gap-2 mb-1">
                 <span className="text-gray-600 font-medium">ISBN:</span>
                 <span className="text-gray-800">978-1-234567-90-6</span>
               </div>
-              <div className="flex gap-2">
+              <div className="flex gap-2 mb-1">
                 <span className="text-gray-600 font-medium">Published:</span>
                 <span className="text-gray-800">January 20, 2024</span>
               </div>
@@ -115,17 +104,17 @@ export default function ProductDetailSection() {
 
             {/* Action Buttons */}
             <div className="flex gap-3">
-              <button className="bg-[#00796B] text-white px-8 py-3 rounded-lg font-medium hover:bg-[#00695C] transition-colors">
+              <button className="bg-[#007AFF] text-white text-[16px] px-3.5 py-2 rounded-xl font-medium hover:bg-[#00695C] transition-colors">
                 Buy Now
               </button>
-              <button className="border border-gray-300 p-3 rounded-lg hover:bg-gray-50 transition-colors">
-                <span className="text-xl">❤️</span>
+              <button className="border bg-[#DBECFF] p-3 rounded-full transition-colors">
+                <HeartStraightIcon className="text-xl text-black" />
               </button>
-              <button className="border border-gray-300 p-3 rounded-lg hover:bg-gray-50 transition-colors">
-                <span className="text-xl">🛒</span>
+              <button className="border bg-[#DBECFF] p-3 rounded-full transition-colors">
+                <ShoppingCartSimpleIcon className="text-xl text-black" />
               </button>
-              <button className="border border-gray-300 p-3 rounded-lg hover:bg-gray-50 transition-colors">
-                <span className="text-xl">👁️</span>
+              <button className="border bg-[#DBECFF] p-3 rounded-full transition-colors">
+                <EyeIcon className="text-xl text-black" weight='fill'/>
               </button>
             </div>
           </div>
