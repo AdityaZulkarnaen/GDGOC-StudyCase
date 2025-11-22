@@ -1,4 +1,4 @@
-import Navbar from '@/global/components/Navbar';
+import Navbar from '@/components/Navbar';
 import Hero from '@/modules/Hero/Hero';
 import ReadingList from '@/modules/ReadingList/ReadingList';
 

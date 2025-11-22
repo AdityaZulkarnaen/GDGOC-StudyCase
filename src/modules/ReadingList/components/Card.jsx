@@ -1,8 +1,8 @@
 import React from 'react';
 
-const Card = ({ title, category, oldPrice, newPrice, image, isHighlighted }) => {
+const Card = ({ title, category, image, price }) => {
   return (
-    <div className='relative flex flex-col items-center p-6 bg-gray-100 rounded-lg hover:shadow-lg transition-shadow'>
+    <div className='relative flex flex-col font-sans items-center p-6 bg-gray-100 rounded-lg hover:shadow-lg transition-shadow'>
       {/* Book Image */}
       <div className="w-full h-48 mb-4 flex items-center justify-center bg-white rounded-md overflow-hidden">
         <img 
@@ -24,11 +24,8 @@ const Card = ({ title, category, oldPrice, newPrice, image, isHighlighted }) => 
       
       {/* Pricing */}
       <div className="flex items-center gap-2">
-        <span className="text-gray-400 line-through text-sm">
-          ${oldPrice}
-        </span>
-        <span className="text-green-600 font-bold text-lg">
-          ${newPrice}
+        <span className="text-gray-400 text-sm">
+          {price}
         </span>
       </div>
     </div>
