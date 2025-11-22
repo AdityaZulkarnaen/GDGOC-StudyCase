@@ -10,7 +10,7 @@ export default function ProductDetailSection() {
   ];
 
   return (
-    <div className="bg-gray-50 min-h-screen py-8">
+    <div className="bg-gray-50 min-h-screen py-8 font-sans">
       <div className="max-w-7xl mx-auto px-6">
         {/* Breadcrumb */}
         <div className="flex items-center gap-2 text-sm text-gray-600 mb-8">
@@ -60,6 +60,15 @@ export default function ProductDetailSection() {
 
           {/* Right Side - Product Info */}
           <div className="flex flex-col">
+            {/* Tags */}
+            <div className="flex gap-3 mb-8">
+              <span className="px-4 py-2 bg-gray-100 text-gray-700 rounded-full text-sm">
+                Self Improvement
+              </span>
+              <span className="px-4 py-2 bg-gray-100 text-gray-700 rounded-full text-sm">
+                Technology
+              </span>
+            </div>
             <h1 className="text-4xl font-bold text-gray-900 mb-4">Beyond the Stars</h1>
             
             {/* Price */}
@@ -103,15 +112,6 @@ export default function ProductDetailSection() {
               </div>
             </div>
 
-            {/* Tags */}
-            <div className="flex gap-3 mb-8">
-              <span className="px-4 py-2 bg-gray-100 text-gray-700 rounded-full text-sm">
-                Self Improvement
-              </span>
-              <span className="px-4 py-2 bg-gray-100 text-gray-700 rounded-full text-sm">
-                Technology
-              </span>
-            </div>
 
             {/* Action Buttons */}
             <div className="flex gap-3">
