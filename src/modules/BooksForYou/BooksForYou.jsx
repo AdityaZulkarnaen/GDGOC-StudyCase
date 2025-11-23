@@ -89,17 +89,18 @@ const BooksForYou = ({ onBookClick }) => {
                 {/* Seperator */}
                 <hr className="bg-[#ECECEC] h-0.5 mb-6" />
 
-                {/* Cards Grid - 2 rows of 4 cards */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                {/* Cards Grid - Horizontal scroll on mobile, grid on desktop */}
+                <div className="flex md:grid md:grid-cols-2 lg:grid-cols-4 gap-6 overflow-x-auto md:overflow-x-visible snap-x snap-mandatory md:snap-none scrollbar-hide pb-4">
                     {books.map((book) => (
-                        <Card
-                            key={book.id}
-                            title={book.title}
-                            category={book.category}
-                            price={book.price}
-                            image={book.image}
-                            onClick={() => onBookClick(book.id)}
-                        />
+                        <div key={book.id} className="shrink-0 w-[280px] md:w-auto snap-center h-full">
+                            <Card
+                                title={book.title}
+                                category={book.category}
+                                price={book.price}
+                                image={book.image}
+                                onClick={() => onBookClick(book.id)}
+                            />
+                        </div>
                     ))}
                 </div>
             </div>

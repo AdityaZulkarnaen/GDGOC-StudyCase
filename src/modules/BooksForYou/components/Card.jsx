@@ -4,7 +4,7 @@ const Card = ({ title, category, price, image, onClick }) => {
     return (
         <div 
             onClick={onClick}
-            className='relative flex flex-col font-sans overflow-hidden rounded-lg hover:shadow-lg transition-shadow shadow-sm cursor-pointer'
+            className='relative flex flex-col font-sans overflow-hidden rounded-lg hover:shadow-lg transition-shadow shadow-sm cursor-pointer h-full min-h-[450px]'
         >
             {/* Book Image Section */}
             <div className="w-full h-[300px] bg-[#B0B0B0] flex items-center justify-center p-8">
@@ -15,9 +15,9 @@ const Card = ({ title, category, price, image, onClick }) => {
             </div>
 
             {/* Book Info Section */}
-            <div className="bg-white p-6 flex-1 flex-col items-start">
+            <div className="bg-white p-6 flex-1 flex-col items-start text-start">
                 {/* Book Title */}
-                <h3 className="text-lg font-semibold text-gray-800 mb-1 text-start">
+                <h3 className="text-lg font-semibold text-gray-800 mb-1 text-start line-clamp-2">
                     {title}
                 </h3>
 

@@ -92,7 +92,7 @@ export default function ProductDetailSection({ selectedBookId, scrolled }) {
           <div className="flex flex-col h-full">
             <div className="relative bg-[#B0B0B0]  overflow-hidden h-full">
               {/* Main Image */}
-              <div className="w-full h-full flex items-center justify-center p-8">
+              <div className="w-full min-h-[400px] flex items-center justify-center p-8">
                 <img
                   src={book.cover_image || '/placeholder.svg'}
                   className="max-h-[350px] w-auto object-contain rounded-lg shadow-2xl"
