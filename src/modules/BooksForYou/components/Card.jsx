@@ -11,7 +11,7 @@ const Card = ({ title, category, price, image, onClick }) => {
                 <img
                     src={image || '/placeholder.svg'}
                     alt={title}
-                    className="max-h-full max-w-full object-contain"
+                    className="max-h-full max-w-full object-contain shadow-2xl"
                 />
             </div>
 
