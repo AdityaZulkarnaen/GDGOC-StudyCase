@@ -8,6 +8,7 @@ import BooksForYou from '@/modules/BooksForYou/BooksForYou';
 
 export default function Home() {
   const [selectedBookId, setSelectedBookId] = useState(null);
+  const [scrolled, setScrolled] = useState(false);
 
   const handleBookClick = (bookId) => {
     setSelectedBookId(bookId);
@@ -17,8 +18,8 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <Navbar />
-      <Hero selectedBookId={selectedBookId} />
+      <Navbar onScrollChange={setScrolled} />
+      <Hero selectedBookId={selectedBookId} scrolled={scrolled} />
       <ReadingList onBookClick={handleBookClick} />
       <BooksForYou onBookClick={handleBookClick} />
     </div>
