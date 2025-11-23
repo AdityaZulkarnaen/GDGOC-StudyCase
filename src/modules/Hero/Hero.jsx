@@ -77,7 +77,7 @@ export default function ProductDetailSection({ selectedBookId, scrolled }) {
   }
 
   return (
-    <div className={`bg-[#FAFAFA] min-h-screen py-6 font-sans ${scrolled ? "pt-24" : ""}`}>
+    <div className={`bg-[#FAFAFA] min-h-screen py-6 font-sans pt-24 ${scrolled ? "md:pt-24" : "md:pt-6"}`}>
       <div className="max-w-7xl mx-auto px-6">
         {/* Breadcrumb */}
         <div className="flex items-center gap-2 text-sm mb-6">
