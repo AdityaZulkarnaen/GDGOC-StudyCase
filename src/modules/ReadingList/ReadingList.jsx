@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import Card from './components/Card';
 
-const ReadingList = () => {
+const ReadingList = ({ onBookClick }) => {
     const [books, setBooks] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -94,6 +94,7 @@ const ReadingList = () => {
                             category={book.category}
                             price={book.price}
                             image={book.image}
+                            onClick={() => onBookClick(book.id)}
                         />
                     ))}
                 </div>

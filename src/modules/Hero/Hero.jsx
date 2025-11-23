@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { CaretRightIcon, ShoppingCartSimpleIcon, EyeIcon, HeartStraightIcon, CaretLeftIcon } from "@phosphor-icons/react";
 
-export default function ProductDetailSection() {
+export default function ProductDetailSection({ selectedBookId }) {
   const [currentBookIndex, setCurrentBookIndex] = useState(2);
   const [books, setBooks] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -31,6 +31,16 @@ export default function ProductDetailSection() {
 
     fetchBooks();
   }, []);
+
+  // Update current book index when selectedBookId changes
+  useEffect(() => {
+    if (selectedBookId && books.length > 0) {
+      const index = books.findIndex(book => book._id === selectedBookId);
+      if (index !== -1) {
+        setCurrentBookIndex(index);
+      }
+    }
+  }, [selectedBookId, books]);
 
   const book = books[currentBookIndex];
 

@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import Card from './components/Card';
 import Dummy from '../../../public/placeholder.svg';
 
-const BooksForYou = () => {
+const BooksForYou = ({ onBookClick }) => {
     const [books, setBooks] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -98,6 +98,7 @@ const BooksForYou = () => {
                             category={book.category}
                             price={book.price}
                             image={book.image}
+                            onClick={() => onBookClick(book.id)}
                         />
                     ))}
                 </div>
