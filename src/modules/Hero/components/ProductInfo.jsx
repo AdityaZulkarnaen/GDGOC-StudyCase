@@ -26,7 +26,7 @@ export default function ProductInfo({ book }) {
       </div>
 
       {/* Description */}
-      <p className="text-gray-600 leading-relaxed mb-8 line-clamp-3">
+      <p className="text-gray-600 leading-relaxed mb-8 line-clamp-5">
         {book.summary || 'No description available'}
       </p>
 

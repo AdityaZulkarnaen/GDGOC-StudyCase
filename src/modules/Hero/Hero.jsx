@@ -6,24 +6,36 @@ import ImageGallery from './components/ImageGallery';
 import ProductInfo from './components/ProductInfo';
 
 export default function ProductDetailSection({ selectedBookId, scrolled }) {
-  const [currentBookIndex, setCurrentBookIndex] = useState(2);
+  const [currentBookIndex, setCurrentBookIndex] = useState(90);
   const [books, setBooks] = useState([]);
   const [loading, setLoading] = useState(true);
+  const TOTAL_PAGES = 20;
 
   useEffect(() => {
     const fetchBooks = async () => {
       try {
         setLoading(true);
-        const response = await fetch('https://bukuacak-9bdcb4ef2605.herokuapp.com/api/v1/book?page=1');
-
-        if (!response.ok) {
-          throw new Error('Failed to fetch books');
+        
+        // Fetch 20 pages of data
+        const fetchPromises = [];
+        for (let page = 1; page <= TOTAL_PAGES; page++) {
+          fetchPromises.push(
+            fetch(`https://bukuacak-9bdcb4ef2605.herokuapp.com/api/v1/book?page=${page}`)
+              .then(res => res.json())
+          );
         }
 
-        const data = await response.json();
-        const booksArray = data.books || [];
-
-        setBooks(booksArray);
+        const results = await Promise.all(fetchPromises);
+        
+        // Combine all books from all pages
+        const allBooks = results.flatMap(data => data.books || []);
+        
+        // Remove duplicates based on _id
+        const uniqueBooks = allBooks.filter((book, index, self) => 
+          index === self.findIndex((b) => b._id === book._id)
+        );
+        
+        setBooks(uniqueBooks);
         setLoading(false);
       } catch (err) {
         console.error('Error fetching books:', err);

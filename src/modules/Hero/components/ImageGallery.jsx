@@ -8,7 +8,6 @@ export default function ImageGallery({ book, currentBookIndex, totalBooks, onPre
         <div className="w-full min-h-[400px] flex items-center justify-center p-8">
           <img
             src={book.cover_image || '/placeholder.svg'}
-            alt={book.title}
             className="max-h-[350px] w-auto object-contain rounded-lg shadow-2xl"
           />
         </div>

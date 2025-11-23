@@ -7,21 +7,33 @@ const ReadingList = ({ onBookClick }) => {
     const [books, setBooks] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const TOTAL_PAGES = 20;
 
     useEffect(() => {
         const fetchBooks = async () => {
             try {
                 setLoading(true);
-                const response = await fetch('https://bukuacak-9bdcb4ef2605.herokuapp.com/api/v1/book?page=1');
-
-                if (!response.ok) {
-                    throw new Error('Failed to fetch books');
+                
+                // Fetch 20 pages of data
+                const fetchPromises = [];
+                for (let page = 1; page <= TOTAL_PAGES; page++) {
+                    fetchPromises.push(
+                        fetch(`https://bukuacak-9bdcb4ef2605.herokuapp.com/api/v1/book?page=${page}`)
+                            .then(res => res.json())
+                    );
                 }
 
-                const data = await response.json();
+                const results = await Promise.all(fetchPromises);
+                
+                // Combine all books from all pages
+                const allBooks = results.flatMap(data => data.books || []);
 
-                const booksArray = data.books || [];
-                const booksData = booksArray.slice(5, 9).map((book) => ({
+                // Remove duplicates based on _id
+                const uniqueBooks = allBooks.filter((book, index, self) => 
+                    index === self.findIndex((b) => b._id === book._id)
+                );
+
+                const booksData = uniqueBooks.slice(5, 9).map((book) => ({
                     id: book._id,
                     title: book.title,
                     category: book.category?.name || 'General',

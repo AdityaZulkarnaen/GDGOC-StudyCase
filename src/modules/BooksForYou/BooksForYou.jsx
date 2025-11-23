@@ -2,28 +2,43 @@
 
 import React, { useState, useEffect } from 'react';
 import Card from '@/components/Card';
+import Pagination from '@/components/Pagination';
 import Dummy from '../../../public/placeholder.svg';
 
 const BooksForYou = ({ onBookClick }) => {
     const [books, setBooks] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [currentPage, setCurrentPage] = useState(1);
+    const TOTAL_PAGES = 10;
+    const BOOKS_PER_PAGE = 8;
 
     useEffect(() => {
         const fetchBooks = async () => {
             try {
                 setLoading(true);
-                const response = await fetch('https://bukuacak-9bdcb4ef2605.herokuapp.com/api/v1/book?page=1');
-
-                if (!response.ok) {
-                    throw new Error('Failed to fetch books');
+                
+                // Fetch 10 pages of data
+                const fetchPromises = [];
+                for (let page = 1; page <= TOTAL_PAGES; page++) {
+                    fetchPromises.push(
+                        fetch(`https://bukuacak-9bdcb4ef2605.herokuapp.com/api/v1/book?page=${page}`)
+                            .then(res => res.json())
+                    );
                 }
 
-                const data = await response.json();
+                const results = await Promise.all(fetchPromises);
+                
+                // Combine all books from all pages
+                const allBooks = results.flatMap(data => data.books || []);
 
-                // Ambil 8 buku dari response untuk ditampilkan dalam 2 baris
-                const booksArray = data.books || [];
-                const booksData = booksArray.slice(0, 8).map((book) => ({
+                // Remove duplicates based on _id
+                const uniqueBooks = allBooks.filter((book, index, self) => 
+                    index === self.findIndex((b) => b._id === book._id)
+                );
+
+                // Map semua buku
+                const booksData = uniqueBooks.map((book) => ({
                     id: book._id,
                     title: book.title,
                     category: book.category?.name || 'General',
@@ -79,6 +94,16 @@ const BooksForYou = ({ onBookClick }) => {
         );
     }
 
+    // Calculate pagination
+    const totalPages = Math.ceil(books.length / BOOKS_PER_PAGE);
+    const startIndex = (currentPage - 1) * BOOKS_PER_PAGE;
+    const endIndex = startIndex + BOOKS_PER_PAGE;
+    const currentBooks = books.slice(startIndex, endIndex);
+
+    const handlePageChange = (page) => {
+        setCurrentPage(page);
+    };
+
     return (
         <section className="py-16 px-4 bg-[#FAFAFA] font-sans">
             <div className="max-w-7xl mx-auto">
@@ -89,9 +114,9 @@ const BooksForYou = ({ onBookClick }) => {
                 {/* Seperator */}
                 <hr className="bg-[#ECECEC] h-0.5 mb-6" />
 
-                {/* Cards Grid - Horizontal scroll on mobile, grid on desktop */}
+                {/* Cards Grid */}
                 <div className="flex md:grid md:grid-cols-2 lg:grid-cols-4 gap-6 overflow-x-auto md:overflow-x-visible snap-x snap-mandatory md:snap-none scrollbar-hide pb-4">
-                    {books.map((book) => (
+                    {currentBooks.map((book) => (
                         <div key={book.id} className="shrink-0 w-[280px] md:w-auto snap-center h-full">
                             <Card
                                 title={book.title}
@@ -103,6 +128,13 @@ const BooksForYou = ({ onBookClick }) => {
                         </div>
                     ))}
                 </div>
+
+                {/* Pagination */}
+                <Pagination
+                    currentPage={currentPage}
+                    totalPages={totalPages}
+                    onPageChange={handlePageChange}
+                />
             </div>
         </section>
     );
