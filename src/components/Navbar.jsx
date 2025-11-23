@@ -126,14 +126,17 @@ export default function Navbar({ onScrollChange }) {
           <button
             className="md:hidden text-gray-600 hover:text-gray-900"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          >
+          > {mobileMenuOpen ?
+            <XIcon className="w-6 h-6" weight="bold" />
+          : 
             <ListIcon className="w-6 h-6" weight="bold" />
+          }
           </button>
         </div>
 
         <div
-          className={`md:hidden fixed left-0 right-0 bg-white border-b shadow-lg transition-all duration-300 ease-in-out ${
-            mobileMenuOpen ? "top-[72px] opacity-100" : "-top-full opacity-0"
+          className={`md:hidden fixed left-0 right-0 bg-white shadow-lg transition-all duration-300 ease-in-out ${
+            mobileMenuOpen ? "top-[68px] opacity-100" : "-top-full opacity-0"
           } ${scrolled ? "fixed" : "fixed"}`}
         >
           <div className="flex flex-col items-center py-8 gap-6">
@@ -170,12 +173,12 @@ export default function Navbar({ onScrollChange }) {
               </li>
             </ul>
 
-            <div className="flex flex-col items-center gap-6 pt-4 border-t border-gray-200 w-full">
+            <div className="flex flex-col items-center gap-6 pt-4 w-full">
               <a href="#" className="text-[#23A6F0] hover:text-[#23A6F0] flex items-center gap-2">
                 <UserIcon className="w-5 h-5 text-[#23A6F0]" />
                 <span className="font-semibold">Login / Register</span>
               </a>
-              <div className="flex items-center gap-6">
+              <div className="flex flex-col items-center gap-6">
                 <button className="text-gray-600 hover:text-gray-900">
                   <MagnifyingGlassIcon className="w-6 h-6 text-[#23A6F0]" />
                 </button>

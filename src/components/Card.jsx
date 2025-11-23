@@ -1,16 +1,16 @@
 import React from 'react';
 
-const Card = ({ title, category, image, price, onClick }) => {
+const Card = ({ title, category, price, image, onClick }) => {
   return (
     <div 
       onClick={onClick}
-      className='relative flex flex-col font-sans overflow-hidden rounded-lg hover:shadow-lg transition-shadow shadow-sm cursor-pointer h-full min-h-[460px]'
+      className='relative flex flex-col font-sans overflow-hidden rounded-lg hover:shadow-lg transition-shadow shadow-sm cursor-pointer h-full min-h-[450px]'
     >
       {/* Book Image Section */}
       <div className="w-full h-[300px] bg-[#B0B0B0] flex items-center justify-center p-8">
         <img
           src={image || '/placeholder.svg'}
-          className="max-h-full max-w-full object-contain"
+          className="max-h-full max-w-full object-contain shadow-2xl"
         />
       </div>
 

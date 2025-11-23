@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import Card from './components/Card';
+import Card from '@/components/Card';
 
 const ReadingList = ({ onBookClick }) => {
     const [books, setBooks] = useState([]);
@@ -20,7 +20,6 @@ const ReadingList = ({ onBookClick }) => {
 
                 const data = await response.json();
 
-                // Ambil 4 buku pertama dari response
                 const booksArray = data.books || [];
                 const booksData = booksArray.slice(5, 9).map((book) => ({
                     id: book._id,
