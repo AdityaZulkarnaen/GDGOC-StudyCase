@@ -4,40 +4,47 @@ import { useState, useEffect } from 'react';
 import { CaretRightIcon, ShoppingCartSimpleIcon, EyeIcon, HeartStraightIcon, CaretLeftIcon } from "@phosphor-icons/react";
 
 export default function ProductDetailSection() {
-  const [currentImageIndex, setCurrentImageIndex] = useState(0);
-  const [book, setBook] = useState(null);
+  const [currentBookIndex, setCurrentBookIndex] = useState(2);
+  const [books, setBooks] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchBook = async () => {
+    const fetchBooks = async () => {
       try {
         setLoading(true);
         const response = await fetch('https://bukuacak-9bdcb4ef2605.herokuapp.com/api/v1/book?page=1');
 
         if (!response.ok) {
-          throw new Error('Failed to fetch book');
+          throw new Error('Failed to fetch books');
         }
 
         const data = await response.json();
         const booksArray = data.books || [];
 
-        if (booksArray.length > 0) {
-          setBook(booksArray[2]);
-        }
-
+        setBooks(booksArray);
         setLoading(false);
       } catch (err) {
-        console.error('Error fetching book:', err);
+        console.error('Error fetching books:', err);
         setLoading(false);
       }
     };
 
-    fetchBook();
+    fetchBooks();
   }, []);
 
-  const images = [
-    book?.cover_image || '/book-image.jpg',
-  ];
+  const book = books[currentBookIndex];
+
+  const handlePrevious = () => {
+    if (currentBookIndex > 0) {
+      setCurrentBookIndex(currentBookIndex - 1);
+    }
+  };
+
+  const handleNext = () => {
+    if (currentBookIndex < books.length - 1) {
+      setCurrentBookIndex(currentBookIndex + 1);
+    }
+  };
 
   if (loading) {
     return (
@@ -85,14 +92,16 @@ export default function ProductDetailSection() {
 
               {/* Navigation Arrows */}
               <button
-                onClick={() => setCurrentImageIndex(Math.max(0, currentImageIndex - 1))}
-                className="absolute left-4 top-1/2 -translate-y-1/2 bg-transparent rounded-full"
+                onClick={handlePrevious}
+                disabled={currentBookIndex === 0}
+                className={`absolute left-4 top-1/2 -translate-y-1/2 bg-transparent rounded-full ${currentBookIndex === 0 ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}
               >
                 <CaretLeftIcon className="text-6xl text-white" />
               </button>
               <button
-                onClick={() => setCurrentImageIndex(Math.min(images.length - 1, currentImageIndex + 1))}
-                className="absolute right-4 top-1/2 -translate-y-1/2 bg-transparent rounded-full"
+                onClick={handleNext}
+                disabled={currentBookIndex === books.length - 1}
+                className={`absolute right-4 top-1/2 -translate-y-1/2 bg-transparent rounded-full ${currentBookIndex === books.length - 1 ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}
               >
                 <CaretRightIcon className="text-6xl text-white" />
               </button>
