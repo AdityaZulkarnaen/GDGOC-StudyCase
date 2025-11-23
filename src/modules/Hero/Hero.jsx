@@ -95,7 +95,6 @@ export default function ProductDetailSection({ selectedBookId }) {
               <div className="w-full h-full flex items-center justify-center p-8">
                 <img
                   src={book.cover_image || '/placeholder.svg'}
-                  alt={book.title}
                   className="max-h-[350px] w-auto object-contain rounded-lg shadow-2xl"
                 />
               </div>

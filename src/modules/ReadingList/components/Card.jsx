@@ -10,8 +10,7 @@ const Card = ({ title, category, image, price, onClick }) => {
       <div className="w-full h-[300px] bg-[#B0B0B0] flex items-center justify-center p-8">
         <img
           src={image || '/placeholder.svg'}
-          alt={title}
-          className="max-h-full max-w-full object-contain shadow-2xl"
+          className="max-h-full max-w-full object-contain"
         />
       </div>
 
