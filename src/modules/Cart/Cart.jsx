@@ -36,11 +36,9 @@ export default function Cart() {
     };
   }, []);
 
-  // Recalculate total when cart changes
   useEffect(() => {
     setTotal(calculateTotal());
     
-    // Check if all items are selected
     const allSelected = cartItems.length > 0 && cartItems.every(item => item.selected);
     setSelectAllChecked(allSelected);
   }, [cartItems]);
