@@ -1,13 +1,16 @@
 import { ShoppingCartSimpleIcon, EyeIcon, HeartStraightIcon } from "@phosphor-icons/react";
 import { useState, useEffect } from 'react';
 import { isInWishlist, toggleWishlist } from '@/utils/wishlist';
+import { addToCart, isInCart } from '@/utils/cart';
 
 export default function ProductInfo({ book }) {
   const [isWishlisted, setIsWishlisted] = useState(false);
+  const [isInCartState, setIsInCartState] = useState(false);
 
   useEffect(() => {
     if (book?._id) {
       setIsWishlisted(isInWishlist(book._id));
+      setIsInCartState(isInCart(book._id));
     }
   }, [book]);
 
@@ -18,8 +21,19 @@ export default function ProductInfo({ book }) {
       }
     };
 
+    const handleCartUpdate = () => {
+      if (book?._id) {
+        setIsInCartState(isInCart(book._id));
+      }
+    };
+
     window.addEventListener('wishlistUpdated', handleWishlistUpdate);
-    return () => window.removeEventListener('wishlistUpdated', handleWishlistUpdate);
+    window.addEventListener('cartUpdated', handleCartUpdate);
+    
+    return () => {
+      window.removeEventListener('wishlistUpdated', handleWishlistUpdate);
+      window.removeEventListener('cartUpdated', handleCartUpdate);
+    };
   }, [book]);
 
   const handleToggleWishlist = () => {
@@ -37,6 +51,23 @@ export default function ProductInfo({ book }) {
     setIsWishlisted(newState);
     
     window.dispatchEvent(new Event('wishlistUpdated'));
+  };
+
+  const handleAddToCart = () => {
+    if (!book) return;
+
+    const bookData = {
+      id: book._id,
+      title: book.title,
+      category: book.category?.name || 'General',
+      price: book.details?.price || '0',
+      image: book.cover_image || '/placeholder.svg',
+    };
+
+    addToCart(bookData, 1);
+    setIsInCartState(true);
+    
+    window.dispatchEvent(new Event('cartUpdated'));
   };
 
   return (
@@ -108,8 +139,18 @@ export default function ProductInfo({ book }) {
             color={isWishlisted ? "#E74040" : "#000000"}
           />
         </button>
-        <button className="border bg-[#DBECFF] p-3 rounded-full transition-colors cursor-pointer">
-          <ShoppingCartSimpleIcon className="text-xl text-black" />
+        <button 
+          onClick={handleAddToCart}
+          className={`border p-3 rounded-full transition-all cursor-pointer hover:scale-110 active:scale-95 ${
+            isInCartState ? 'bg-green-100' : 'bg-[#DBECFF]'
+          }`}
+          aria-label={isInCartState ? "Already in cart" : "Add to cart"}
+        >
+          <ShoppingCartSimpleIcon 
+            className="text-xl" 
+            weight={isInCartState ? "fill" : "regular"}
+            color={isInCartState ? "#16A34A" : "#000000"}
+          />
         </button>
         <button className="border bg-[#DBECFF] p-3 rounded-full transition-colors cursor-pointer">
           <EyeIcon className="text-xl text-black" weight='fill' />

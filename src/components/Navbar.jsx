@@ -2,14 +2,18 @@
 import React, { useEffect, useRef, useState } from "react";
 import { EnvelopeIcon, PhoneIcon, UserIcon, MagnifyingGlassIcon, ShoppingCartSimpleIcon, HeartIcon, CaretDownIcon, ListIcon, XIcon } from "@phosphor-icons/react";
 import { getWishlist } from '@/utils/wishlist';
+import { getCartCount } from '@/utils/cart';
+import { useRouter } from 'next/navigation';
 
 export default function Navbar({ onScrollChange, onSearch }) {
+  const router = useRouter();
   const topbarRef = useRef(null);
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [showSearchInput, setShowSearchInput] = useState(false);
   const [wishlistCount, setWishlistCount] = useState(0);
+  const [cartCount, setCartCount] = useState(0);
 
   useEffect(() => {
     const topbarEl = topbarRef.current;
@@ -49,6 +53,29 @@ export default function Navbar({ onScrollChange, onSearch }) {
     return () => {
       window.removeEventListener('wishlistUpdated', handleWishlistUpdate);
       window.removeEventListener('storage', handleWishlistUpdate);
+    };
+  }, []);
+
+  // Update cart count on mount and when cart changes
+  useEffect(() => {
+    const updateCartCount = () => {
+      setCartCount(getCartCount());
+    };
+
+    // Initial load
+    updateCartCount();
+
+    // Listen for cart updates
+    const handleCartUpdate = () => {
+      updateCartCount();
+    };
+
+    window.addEventListener('cartUpdated', handleCartUpdate);
+    window.addEventListener('storage', handleCartUpdate);
+
+    return () => {
+      window.removeEventListener('cartUpdated', handleCartUpdate);
+      window.removeEventListener('storage', handleCartUpdate);
     };
   }, []);
 
@@ -163,9 +190,12 @@ export default function Navbar({ onScrollChange, onSearch }) {
               <MagnifyingGlassIcon className="w-5 h-5 text-[#23A6F0]" />
             </button>
             
-            <button className="text-gray-600 hover:text-gray-900 flex w-fit flex-row relative">
+            <button 
+              onClick={() => router.push('/cart')}
+              className="text-gray-600 hover:text-gray-900 flex w-fit flex-row relative"
+            >
               <ShoppingCartSimpleIcon className="w-5 h-5 text-[#23A6F0]" />
-              <p className="ml-1 text-[#23A6F0]">1</p>
+              <p className="ml-1 text-[#23A6F0]">{cartCount}</p>
             </button>
             <button className="text-gray-600 hover:text-gray-900 flex w-fit flex-row relative">
               <HeartIcon className="w-5 h-5 text-[#23A6F0]" />
@@ -259,7 +289,7 @@ export default function Navbar({ onScrollChange, onSearch }) {
               
               <div className="flex flex-col items-center gap-6 w-full">
                 <button 
-                  className="text-gray-600 hover:text-gray-900"
+                  className="text-gray-600 hover:text-gray-900 cursor-pointer"
                   onClick={toggleSearch}
                 >
                   <MagnifyingGlassIcon className="w-6 h-6 text-[#23A6F0]" />
@@ -279,11 +309,14 @@ export default function Navbar({ onScrollChange, onSearch }) {
                   </div>
                 )}
                 
-                <button className="text-gray-600 hover:text-gray-900 flex flex-row relative">
+                <button 
+                  onClick={() => router.push('/cart')}
+                  className="text-gray-600 hover:text-gray-900 flex flex-row relative"
+                >
                   <ShoppingCartSimpleIcon className="w-6 h-6 text-[#23A6F0]" />
-                  <p className="ml-1 text-[#23A6F0]">1</p>
+                  <p className="ml-1 text-[#23A6F0]">{cartCount}</p>
                 </button>
-                <button className="text-gray-600 hover:text-gray-900 flex flex-row relative">
+                <button className="text-gray-600 hover:text-gray-900 flex flex-row relativer">
                   <HeartIcon className="w-6 h-6 text-[#23A6F0]" />
                   <p className="ml-1 text-[#23A6F0]">{wishlistCount}</p>
                 </button>
