@@ -1,6 +1,7 @@
 "use client";
 import React, { useEffect, useRef, useState } from "react";
 import { EnvelopeIcon, PhoneIcon, UserIcon, MagnifyingGlassIcon, ShoppingCartSimpleIcon, HeartIcon, CaretDownIcon, ListIcon, XIcon } from "@phosphor-icons/react";
+import { getWishlist } from '@/utils/wishlist';
 
 export default function Navbar({ onScrollChange, onSearch }) {
   const topbarRef = useRef(null);
@@ -8,6 +9,7 @@ export default function Navbar({ onScrollChange, onSearch }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [showSearchInput, setShowSearchInput] = useState(false);
+  const [wishlistCount, setWishlistCount] = useState(0);
 
   useEffect(() => {
     const topbarEl = topbarRef.current;
@@ -25,6 +27,30 @@ export default function Navbar({ onScrollChange, onSearch }) {
     onScroll();
     return () => window.removeEventListener("scroll", onScroll);
   }, [onScrollChange]);
+
+  // Update wishlist count on mount and when wishlist changes
+  useEffect(() => {
+    const updateWishlistCount = () => {
+      const wishlist = getWishlist();
+      setWishlistCount(wishlist.length);
+    };
+
+    // Initial load
+    updateWishlistCount();
+
+    // Listen for wishlist updates
+    const handleWishlistUpdate = () => {
+      updateWishlistCount();
+    };
+
+    window.addEventListener('wishlistUpdated', handleWishlistUpdate);
+    window.addEventListener('storage', handleWishlistUpdate);
+
+    return () => {
+      window.removeEventListener('wishlistUpdated', handleWishlistUpdate);
+      window.removeEventListener('storage', handleWishlistUpdate);
+    };
+  }, []);
 
   const handleSearchChange = (e) => {
     const query = e.target.value;
@@ -143,7 +169,7 @@ export default function Navbar({ onScrollChange, onSearch }) {
             </button>
             <button className="text-gray-600 hover:text-gray-900 flex w-fit flex-row relative">
               <HeartIcon className="w-5 h-5 text-[#23A6F0]" />
-              <p className="ml-1 text-[#23A6F0]">1</p>
+              <p className="ml-1 text-[#23A6F0]">{wishlistCount}</p>
             </button>
           </div>
 
@@ -259,7 +285,7 @@ export default function Navbar({ onScrollChange, onSearch }) {
                 </button>
                 <button className="text-gray-600 hover:text-gray-900 flex flex-row relative">
                   <HeartIcon className="w-6 h-6 text-[#23A6F0]" />
-                  <p className="ml-1 text-[#23A6F0]">1</p>
+                  <p className="ml-1 text-[#23A6F0]">{wishlistCount}</p>
                 </button>
               </div>
             </div>
