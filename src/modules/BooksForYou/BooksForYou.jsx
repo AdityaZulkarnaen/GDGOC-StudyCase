@@ -31,6 +31,7 @@ const BooksForYou = ({ onBookClick, searchQuery }) => {
                 }));
 
                 setBooks(mappedBooks);
+                
                 setLoading(false);
             } catch (err) {
                 console.error('Error loading books:', err);

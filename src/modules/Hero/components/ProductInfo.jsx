@@ -1,6 +1,44 @@
 import { ShoppingCartSimpleIcon, EyeIcon, HeartStraightIcon } from "@phosphor-icons/react";
+import { useState, useEffect } from 'react';
+import { isInWishlist, toggleWishlist } from '@/utils/wishlist';
 
 export default function ProductInfo({ book }) {
+  const [isWishlisted, setIsWishlisted] = useState(false);
+
+  useEffect(() => {
+    if (book?._id) {
+      setIsWishlisted(isInWishlist(book._id));
+    }
+  }, [book]);
+
+  useEffect(() => {
+    const handleWishlistUpdate = () => {
+      if (book?._id) {
+        setIsWishlisted(isInWishlist(book._id));
+      }
+    };
+
+    window.addEventListener('wishlistUpdated', handleWishlistUpdate);
+    return () => window.removeEventListener('wishlistUpdated', handleWishlistUpdate);
+  }, [book]);
+
+  const handleToggleWishlist = () => {
+    if (!book) return;
+
+    const bookData = {
+      id: book._id,
+      title: book.title,
+      category: book.category?.name || 'General',
+      price: book.details?.price || 'Price not available',
+      image: book.cover_image || '/placeholder.svg',
+    };
+
+    const newState = toggleWishlist(bookData);
+    setIsWishlisted(newState);
+    
+    window.dispatchEvent(new Event('wishlistUpdated'));
+  };
+
   return (
     <div className="flex flex-col">
       {/* Tags */}
@@ -59,8 +97,16 @@ export default function ProductInfo({ book }) {
         <button className="bg-[#007AFF] text-white text-[16px] px-3.5 py-2 rounded-xl font-medium hover:bg-blue-600 transition-colors cursor-pointer">
           Buy Now
         </button>
-        <button className="border bg-[#DBECFF] p-3 rounded-full transition-colors cursor-pointer">
-          <HeartStraightIcon className="text-xl text-black" />
+        <button 
+          onClick={handleToggleWishlist}
+          className="border bg-[#DBECFF] p-3 rounded-full transition-all cursor-pointer hover:scale-110 active:scale-95"
+          aria-label={isWishlisted ? "Remove from wishlist" : "Add to wishlist"}
+        >
+          <HeartStraightIcon 
+            className="text-xl" 
+            weight={isWishlisted ? "fill" : "regular"}
+            color={isWishlisted ? "#E74040" : "#000000"}
+          />
         </button>
         <button className="border bg-[#DBECFF] p-3 rounded-full transition-colors cursor-pointer">
           <ShoppingCartSimpleIcon className="text-xl text-black" />
