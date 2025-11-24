@@ -1,10 +1,14 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import Card from '@/components/Card';
 import Pagination from '@/components/Pagination';
 import Dummy from '../../../public/placeholder.svg';
 import { fetchBooksFromMultiplePages } from '@/services/bookService';
+import LoadingState from './components/LoadingState';
+import ErrorState from './components/ErrorState';
+import SectionHeader from './components/SectionHeader';
+import NoResults from './components/NoResults';
+import BookGrid from './components/BookGrid';
 
 const BooksForYou = ({ onBookClick, searchQuery }) => {
     const [books, setBooks] = useState([]);
@@ -48,41 +52,8 @@ const BooksForYou = ({ onBookClick, searchQuery }) => {
         setCurrentPage(1);
     }, [searchQuery]);
 
-    if (loading) {
-        return (
-            <section className="py-16 px-4 bg-[#FAFAFA] font-sans">
-                <div className="max-w-7xl mx-auto">
-                    <h2 className="text-[32px] font-semibold text-[#252B42] mb-6 text-start">
-                        Books For You
-                    </h2>
-
-                    {/* Seperator */}
-                    <hr className="bg-[#ECECEC] h-0.5 mb-6" />
-
-                    <div className="text-center py-12">
-                        <p className="text-gray-500">Loading books...</p>
-                    </div>
-                </div>
-            </section>
-        );
-    }
-
-    if (error) {
-        return (
-            <section className="py-16 px-4 bg-[#FAFAFA] font-sans">
-                <div className="max-w-7xl mx-auto">
-                    <h2 className="text-[32px] font-semibold text-[#252B42] mb-6 text-start">
-                        Books For You
-                    </h2>
-                    {/* Seperator */}
-                    <hr className="bg-[#ECECEC] h-0.5 mb-6" />
-                    <div className="text-center py-12">
-                        <p className="text-red-500">Error: {error}</p>
-                    </div>
-                </div>
-            </section>
-        );
-    }
+    if (loading) return <LoadingState />;
+    if (error) return <ErrorState error={error} />;
 
     // Filter books based on search query
     const filteredBooks = searchQuery 
@@ -105,44 +76,22 @@ const BooksForYou = ({ onBookClick, searchQuery }) => {
     return (
         <section className="py-16 px-4 bg-[#FAFAFA] font-sans">
             <div className="max-w-7xl mx-auto">
-                {/* Section Title */}
-                <h2 className="text-[32px] font-semibold text-[#252B42] mb-6 text-start">
-                    Books For You {searchQuery && `(${filteredBooks.length} results)`}
-                </h2>
-                {/* Seperator */}
-                <hr className="bg-[#ECECEC] h-0.5 mb-6" />
+                <SectionHeader 
+                    searchQuery={searchQuery} 
+                    resultsCount={filteredBooks.length} 
+                />
 
-                {/* No Results Message */}
-                {currentBooks.length === 0 && (
-                    <div className="text-center py-12">
-                        <p className="text-gray-500">No books found matching "{searchQuery}"</p>
-                    </div>
-                )}
-
-                {/* Cards Grid */}
-                {currentBooks.length > 0 && (
-                    <div className="flex md:grid md:grid-cols-2 lg:grid-cols-4 gap-6 overflow-x-auto md:overflow-x-visible snap-x snap-mandatory md:snap-none scrollbar-hide pb-4">
-                        {currentBooks.map((book) => (
-                            <div key={book.id} className="shrink-0 w-[280px] md:w-auto snap-center h-full">
-                                <Card
-                                    title={book.title}
-                                    category={book.category}
-                                    price={book.price}
-                                    image={book.image}
-                                    onClick={() => onBookClick(book.id)}
-                                />
-                            </div>
-                        ))}
-                    </div>
-                )}
-
-                {/* Pagination */}
-                {currentBooks.length > 0 && (
-                    <Pagination
-                        currentPage={currentPage}
-                        totalPages={totalPages}
-                        onPageChange={handlePageChange}
-                    />
+                {currentBooks.length === 0 ? (
+                    <NoResults searchQuery={searchQuery} />
+                ) : (
+                    <>
+                        <BookGrid books={currentBooks} onBookClick={onBookClick} />
+                        <Pagination
+                            currentPage={currentPage}
+                            totalPages={totalPages}
+                            onPageChange={handlePageChange}
+                        />
+                    </>
                 )}
             </div>
         </section>

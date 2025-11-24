@@ -1,8 +1,11 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import Card from '@/components/Card';
-import { getWishlist, isInWishlist as checkIsInWishlist, toggleWishlist } from '@/utils/wishlist';
+import { getWishlist, toggleWishlist } from '@/utils/wishlist';
+import EmptyReadingList from './components/EmptyReadingList';
+import SectionHeader from './components/SectionHeader';
+import NoResults from './components/NoResults';
+import BookCarousel from './components/BookCarousel';
 
 const ReadingList = ({ onBookClick, searchQuery }) => {
     const [books, setBooks] = useState([]);
@@ -64,57 +67,24 @@ const ReadingList = ({ onBookClick, searchQuery }) => {
           )
         : books;
 
+    // Empty state
     if (filteredBooks.length === 0 && !searchQuery) {
-        return (
-            <section className="py-16 px-4 bg-[#FAFAFA] font-sans">
-                <div className="max-w-7xl mx-auto">
-                    <h2 className="text-[32px] font-semibold text-[#252B42] mb-6 text-start">
-                        Your Reading List
-                    </h2>
-                    <hr className="bg-[#ECECEC] h-0.5 mb-6" />
-                    <div className="text-center py-12">
-                        <p className="text-gray-500">No books in your reading list. Click the heart icon on any book to add it here!</p>
-                    </div>
-                </div>
-            </section>
-        );
+        return <EmptyReadingList />;
     }
 
+    // Main render
     return (
         <section className="py-16 px-4 bg-[#FAFAFA] font-sans">
             <div className="max-w-7xl mx-auto">
-                {/* Section Title */}
-                <h2 className="text-[32px] font-semibold text-[#252B42] mb-6 text-start">
-                    Your Reading List {searchQuery && `(${filteredBooks.length} results)`}
-                </h2>
+                <SectionHeader 
+                    searchQuery={searchQuery} 
+                    resultsCount={filteredBooks.length} 
+                />
 
-                {/* Seperator */}
-                <hr className="bg-[#ECECEC] h-0.5 mb-6" />
-
-                {/* No Results Message */}
-                {filteredBooks.length === 0 && searchQuery && (
-                    <div className="text-center py-12">
-                        <p className="text-gray-500">No books found matching "{searchQuery}"</p>
-                    </div>
-                )}
-
-                {/* Cards Grid */}
-                {filteredBooks.length > 0 && (
-                    <div className="relative">
-                        <div className="flex gap-6 overflow-x-auto snap-x snap-mandatory scrollbar-hide pb-4 scroll-smooth">
-                            {filteredBooks.map((book) => (
-                                <div key={book.id} className="shrink-0 w-[280px] snap-center h-full">
-                                    <Card
-                                        title={book.title}
-                                        category={book.category}
-                                        price={book.price}
-                                        image={book.image}
-                                        onClick={() => onBookClick(book.id)}
-                                    />
-                                </div>
-                            ))}
-                        </div>
-                    </div>
+                {filteredBooks.length === 0 && searchQuery ? (
+                    <NoResults searchQuery={searchQuery} />
+                ) : (
+                    <BookCarousel books={filteredBooks} onBookClick={onBookClick} />
                 )}
             </div>
         </section>
