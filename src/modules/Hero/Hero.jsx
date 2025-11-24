@@ -4,46 +4,27 @@ import { useState, useEffect } from 'react';
 import Breadcrumb from './components/Breadcrumb';
 import ImageGallery from './components/ImageGallery';
 import ProductInfo from './components/ProductInfo';
+import { fetchAllBooks } from '@/services/bookService';
 
 export default function ProductDetailSection({ selectedBookId, scrolled }) {
   const [currentBookIndex, setCurrentBookIndex] = useState(90);
   const [books, setBooks] = useState([]);
   const [loading, setLoading] = useState(true);
-  const TOTAL_PAGES = 20;
 
   useEffect(() => {
-    const fetchBooks = async () => {
+    const loadBooks = async () => {
       try {
         setLoading(true);
-        
-        // Fetch 20 pages of data
-        const fetchPromises = [];
-        for (let page = 1; page <= TOTAL_PAGES; page++) {
-          fetchPromises.push(
-            fetch(`https://bukuacak-9bdcb4ef2605.herokuapp.com/api/v1/book?page=${page}`)
-              .then(res => res.json())
-          );
-        }
-
-        const results = await Promise.all(fetchPromises);
-        
-        // Combine all books from all pages
-        const allBooks = results.flatMap(data => data.books || []);
-        
-        // Remove duplicates based on _id
-        const uniqueBooks = allBooks.filter((book, index, self) => 
-          index === self.findIndex((b) => b._id === book._id)
-        );
-        
-        setBooks(uniqueBooks);
+        const booksData = await fetchAllBooks();
+        setBooks(booksData);
         setLoading(false);
       } catch (err) {
-        console.error('Error fetching books:', err);
+        console.error('Error loading books:', err);
         setLoading(false);
       }
     };
 
-    fetchBooks();
+    loadBooks();
   }, []);
 
   // Update current book index when selectedBookId changes

@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import Card from '@/components/Card';
 import Pagination from '@/components/Pagination';
 import Dummy from '../../../public/placeholder.svg';
+import { fetchBooksFromMultiplePages } from '@/services/bookService';
 
 const BooksForYou = ({ onBookClick }) => {
     const [books, setBooks] = useState([]);
@@ -14,31 +15,14 @@ const BooksForYou = ({ onBookClick }) => {
     const BOOKS_PER_PAGE = 8;
 
     useEffect(() => {
-        const fetchBooks = async () => {
+        const loadBooks = async () => {
             try {
                 setLoading(true);
                 
-                // Fetch 10 pages of data
-                const fetchPromises = [];
-                for (let page = 1; page <= TOTAL_PAGES; page++) {
-                    fetchPromises.push(
-                        fetch(`https://bukuacak-9bdcb4ef2605.herokuapp.com/api/v1/book?page=${page}`)
-                            .then(res => res.json())
-                    );
-                }
-
-                const results = await Promise.all(fetchPromises);
-                
-                // Combine all books from all pages
-                const allBooks = results.flatMap(data => data.books || []);
-
-                // Remove duplicates based on _id
-                const uniqueBooks = allBooks.filter((book, index, self) => 
-                    index === self.findIndex((b) => b._id === book._id)
-                );
+                const booksData = await fetchBooksFromMultiplePages(TOTAL_PAGES);
 
                 // Map semua buku
-                const booksData = uniqueBooks.map((book) => ({
+                const mappedBooks = booksData.map((book) => ({
                     id: book._id,
                     title: book.title,
                     category: book.category?.name || 'General',
@@ -46,16 +30,16 @@ const BooksForYou = ({ onBookClick }) => {
                     image: book.cover_image || Dummy,
                 }));
 
-                setBooks(booksData);
+                setBooks(mappedBooks);
                 setLoading(false);
             } catch (err) {
-                console.error('Error fetching books:', err);
+                console.error('Error loading books:', err);
                 setError(err.message);
                 setLoading(false);
             }
         };
 
-        fetchBooks();
+        loadBooks();
     }, []);
 
     if (loading) {
