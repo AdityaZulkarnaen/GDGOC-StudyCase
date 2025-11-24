@@ -231,18 +231,28 @@ export default function Navbar({ onScrollChange, onSearch }) {
                 <span className="font-semibold">Login / Register</span>
               </a>
               
-              {/* Mobile Search */}
-              <div className="flex flex-col items-center gap-4 w-full px-6">
-                <input
-                  type="text"
-                  value={searchQuery}
-                  onChange={handleSearchChange}
-                  placeholder="Search books..."
-                  className="border border-[#23A6F0] rounded-md px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#23A6F0] w-full"
-                />
-              </div>
-              
-              <div className="flex flex-col items-center gap-6">
+              <div className="flex flex-col items-center gap-6 w-full">
+                <button 
+                  className="text-gray-600 hover:text-gray-900"
+                  onClick={toggleSearch}
+                >
+                  <MagnifyingGlassIcon className="w-6 h-6 text-[#23A6F0]" />
+                </button>
+                
+                {/* Mobile Search Bar */}
+                {showSearchInput && (
+                  <div className="w-full px-6">
+                    <input
+                      type="text"
+                      value={searchQuery}
+                      onChange={handleSearchChange}
+                      placeholder="Search books..."
+                      className="border-2 rounded-md px-4 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-gray-300 w-full text-gray-700"
+                      autoFocus
+                    />
+                  </div>
+                )}
+                
                 <button className="text-gray-600 hover:text-gray-900 flex flex-row relative">
                   <ShoppingCartSimpleIcon className="w-6 h-6 text-[#23A6F0]" />
                   <p className="ml-1 text-[#23A6F0]">1</p>
