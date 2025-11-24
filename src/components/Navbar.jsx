@@ -2,10 +2,12 @@
 import React, { useEffect, useRef, useState } from "react";
 import { EnvelopeIcon, PhoneIcon, UserIcon, MagnifyingGlassIcon, ShoppingCartSimpleIcon, HeartIcon, CaretDownIcon, ListIcon, XIcon } from "@phosphor-icons/react";
 
-export default function Navbar({ onScrollChange }) {
+export default function Navbar({ onScrollChange, onSearch }) {
   const topbarRef = useRef(null);
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [showSearchInput, setShowSearchInput] = useState(false);
 
   useEffect(() => {
     const topbarEl = topbarRef.current;
@@ -23,6 +25,24 @@ export default function Navbar({ onScrollChange }) {
     onScroll();
     return () => window.removeEventListener("scroll", onScroll);
   }, [onScrollChange]);
+
+  const handleSearchChange = (e) => {
+    const query = e.target.value;
+    setSearchQuery(query);
+    if (onSearch) {
+      onSearch(query);
+    }
+  };
+
+  const toggleSearch = () => {
+    setShowSearchInput(!showSearchInput);
+    if (showSearchInput) {
+      setSearchQuery('');
+      if (onSearch) {
+        onSearch('');
+      }
+    }
+  };
 
   return (
     <div className="w-full bg-white font-sans font-semibold">
@@ -64,7 +84,7 @@ export default function Navbar({ onScrollChange }) {
       </div>
 
       {/* Main Navigation */}
-      <nav className={`bg-white border-b px-6 py-4 font-sans top-0 z-999 fixed md:relative w-full ${scrolled ? "md:fixed lg:fixed" : ""}`}>
+      <nav className={`bg-white px-6 py-4 font-sans top-0 z-999 fixed md:relative w-full ${scrolled ? "md:fixed lg:fixed" : ""} ${showSearchInput ? "" : "border-b"}`}>
         <div className="max-w-7xl mx-auto flex justify-between items-center">
           <div className="text-[24px] font-bold text-[#252B42]">Bookstar</div>
 
@@ -109,9 +129,14 @@ export default function Navbar({ onScrollChange }) {
               <UserIcon className="w-5 h-5 text-[#23A6F0]" />
               <span className="hidden font-semibold lg:inline">Login / Register</span>
             </a>
-            <button className="text-gray-600 hover:text-gray-900">
+            
+            <button 
+              className="text-gray-600 hover:text-gray-900"
+              onClick={toggleSearch}
+            >
               <MagnifyingGlassIcon className="w-5 h-5 text-[#23A6F0]" />
             </button>
+            
             <button className="text-gray-600 hover:text-gray-900 flex w-fit flex-row relative">
               <ShoppingCartSimpleIcon className="w-5 h-5 text-[#23A6F0]" />
               <p className="ml-1 text-[#23A6F0]">1</p>
@@ -132,6 +157,33 @@ export default function Navbar({ onScrollChange }) {
             <ListIcon className="w-6 h-6" weight="bold" />
           }
           </button>
+        </div>
+
+        {/* Search Bar*/}
+        <div
+          className={`hidden md:block absolute left-0 right-0 top-17 bg-white border-b  transition-all duration-300 ease-in-out ${
+            showSearchInput ? "max-h-20 opacity-100 " : "max-h-0 opacity-0 overflow-hidden"
+          }`}
+        >
+          <div className="max-w-7xl mx-auto px-6 py-4">
+            <div className="flex items-center gap-3">
+              <MagnifyingGlassIcon className="w-5 h-5 text-[#23A6F0]" />
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={handleSearchChange}
+                placeholder="Search books by title or category..."
+                className="flex-1 text-base focus:outline-none border border-gray-300 p-2 rounded-md text-gray-700"
+                autoFocus
+              />
+              <button 
+                onClick={toggleSearch}
+                className="text-gray-400 hover:text-gray-600"
+              >
+                <XIcon className="w-5 h-5" weight="bold" />
+              </button>
+            </div>
+          </div>
         </div>
 
         <div
@@ -178,10 +230,19 @@ export default function Navbar({ onScrollChange }) {
                 <UserIcon className="w-5 h-5 text-[#23A6F0]" />
                 <span className="font-semibold">Login / Register</span>
               </a>
+              
+              {/* Mobile Search */}
+              <div className="flex flex-col items-center gap-4 w-full px-6">
+                <input
+                  type="text"
+                  value={searchQuery}
+                  onChange={handleSearchChange}
+                  placeholder="Search books..."
+                  className="border border-[#23A6F0] rounded-md px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#23A6F0] w-full"
+                />
+              </div>
+              
               <div className="flex flex-col items-center gap-6">
-                <button className="text-gray-600 hover:text-gray-900">
-                  <MagnifyingGlassIcon className="w-6 h-6 text-[#23A6F0]" />
-                </button>
                 <button className="text-gray-600 hover:text-gray-900 flex flex-row relative">
                   <ShoppingCartSimpleIcon className="w-6 h-6 text-[#23A6F0]" />
                   <p className="ml-1 text-[#23A6F0]">1</p>
