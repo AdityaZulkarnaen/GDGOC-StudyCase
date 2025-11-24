@@ -12,7 +12,6 @@ export default function Home() {
 
   const handleBookClick = (bookId) => {
     setSelectedBookId(bookId);
-    // Scroll to hero section
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 

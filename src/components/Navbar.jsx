@@ -31,7 +31,7 @@ export default function Navbar({ onScrollChange }) {
         ref={topbarRef}
         className={`hidden md:block bg-[#00796B] text-white px-6 py-3 transition-transform duration-300 ease-in-out ${scrolled ? "-translate-y-full opacity-0 pointer-events-none" : "translate-y-0 opacity-100"}`}
       >
-        <div className="max-w-7xl mx-auto flex justify-between items-center text-sm">
+        <div className="max-w-7xl mx-auto flex justify-between items-center text-xs md:text-[0.6rem] lg:text-sm">
           <div className="flex items-center gap-8">
             <div className="flex items-center font-light gap-2">
               <PhoneIcon className="w-5 h-5" />
